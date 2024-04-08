@@ -1,30 +1,44 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
+<script>
+import AppHeader from './components/AppHeader.vue';
+
+import axios from 'axios';
+const baseEndpoint = 'http://localhost:8000/api/projects/'
+export default {
+    name: 'Boolfolio',
+    components: { AppHeader },
+    data() {
+        return {
+            projects: []
+        }
+    },
+    methods: {
+        fetchProjects() {
+            axios.get(baseEndpoint).then((res) => {
+                this.projects = res.data
+            })
+        }
+    },
+    created() {
+        this.fetchProjects();
+    }
+}
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+    <AppHeader />
+    <h1 class="text-center my-5"> I miei progetti</h1>
+    <div class="row">
+        <div v-for="project in projects" class="col-4">
+            <div class="card mb-3">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{ project.title }}</h5>
+                    <p class="card-text">{{ project.description }}</p>
+                    <p class="card-text"><small class="text-body-secondary">{{ project.created_at }}</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<style scoped></style>
